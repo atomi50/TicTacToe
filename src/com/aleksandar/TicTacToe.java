@@ -14,7 +14,11 @@ public class TicTacToe implements ActionListener {
     JPanel button_panel = new JPanel();
     JLabel textField = new JLabel();
     JButton[] buttons = new JButton[9];
+    JMenuBar menuBar = new JMenuBar();
+    JMenu playAgain = new JMenu("Play again?");
     boolean playerOneTurn;
+    int count = 0;
+
 
 
     public TicTacToe() {
@@ -23,11 +27,17 @@ public class TicTacToe implements ActionListener {
         frame.setSize(700, 700);
         frame.getContentPane().setBackground(new Color(50, 50, 50));
         frame.setLayout(new BorderLayout());
+        frame.setJMenuBar(menuBar); // set menu bar for playing again.
+        menuBar.add(playAgain);   // set menu bar for playing again.
         frame.setVisible(true);
+
+        playAgain.addActionListener(this);
+
+
 
         textField.setBackground(new Color(25, 25, 25));
         textField.setForeground(new Color(25, 255, 0));
-        textField.setFont(new Font("Ink Free", Font.BOLD, 75));
+        textField.setFont(new Font("Comic Sans", Font.BOLD, 75));
         textField.setHorizontalAlignment(JLabel.CENTER);
         textField.setText("Tic-Tac-Toe");
         textField.setOpaque(true);
@@ -65,6 +75,8 @@ public class TicTacToe implements ActionListener {
                         button.setText("X");
                         playerOneTurn = false;
                         textField.setText("O turn");
+                        count++;
+                        System.out.println(count);
                         check();
                     }
                 } else {
@@ -73,6 +85,8 @@ public class TicTacToe implements ActionListener {
                         button.setText("O");
                         playerOneTurn = true;
                         textField.setText("X turn");
+                        count++;
+                        System.out.println(count);
                         check();
                     }
                 }
@@ -82,12 +96,6 @@ public class TicTacToe implements ActionListener {
     }
 
     public void firstTurn() {
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         if (random.nextInt(2) == 0) {
             playerOneTurn = true;
@@ -100,10 +108,11 @@ public class TicTacToe implements ActionListener {
 
     public void check() {
         // check X winning conditions
+
         if (
                 (buttons[0].getText().equals("X")) &&
                         (buttons[1].getText().equals("X")) &&
-                        (buttons[2].getText().equals("X")))  {
+                        (buttons[2].getText().equals("X"))) {
             xWins(0, 1, 2);
         }
         if (
@@ -199,6 +208,10 @@ public class TicTacToe implements ActionListener {
             oWins(2, 4, 6);
         }
 
+        // check if draw
+        if (count == 9) {
+            textField.setText("It's a draw!");
+        }
 
     }
 
@@ -206,10 +219,12 @@ public class TicTacToe implements ActionListener {
         buttons[a].setBackground(Color.green);
         buttons[b].setBackground(Color.green);
         buttons[c].setBackground(Color.green);
-        for(JButton button : buttons){
+        for (JButton button : buttons) {
             button.setEnabled(false);
         }
         textField.setText("X wins!");
+
+
     }
 
     public void oWins(int a, int b, int c) {
@@ -221,6 +236,7 @@ public class TicTacToe implements ActionListener {
             button.setEnabled(false);
         }
         textField.setText("O wins!");
+
 
     }
 
