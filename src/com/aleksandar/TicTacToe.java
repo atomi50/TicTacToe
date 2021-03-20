@@ -14,11 +14,10 @@ public class TicTacToe implements ActionListener {
     JPanel button_panel = new JPanel();
     JLabel textField = new JLabel();
     JButton[] buttons = new JButton[9];
-    JMenuBar menuBar = new JMenuBar();
-    JMenu playAgain = new JMenu("Play again?");
+    JButton playAgain = new JButton("Play again?");
     boolean playerOneTurn;
     int count = 0;
-
+    boolean isWon = false;
 
 
     public TicTacToe() {
@@ -27,12 +26,25 @@ public class TicTacToe implements ActionListener {
         frame.setSize(700, 700);
         frame.getContentPane().setBackground(new Color(50, 50, 50));
         frame.setLayout(new BorderLayout());
-        frame.setJMenuBar(menuBar); // set menu bar for playing again.
-        menuBar.add(playAgain);   // set menu bar for playing again.
+
+        playAgain.setPreferredSize(new Dimension(0,50));
+        playAgain.setFont(new Font("Comic Sans",Font.BOLD,40));
+        playAgain.setFocusable(false);
+        frame.add(playAgain,BorderLayout.SOUTH);
         frame.setVisible(true);
 
-        playAgain.addActionListener(this);
+        // Implemented play again method!
 
+        playAgain.addActionListener(e -> {
+                for(JButton button :buttons){
+                    button.setText("");
+                    button.setBackground(new Color(230, 243, 255));
+                    button.setEnabled(true);
+                    count=0;
+                    isWon= false;
+                }
+                firstTurn();
+        });
 
 
         textField.setBackground(new Color(25, 25, 25));
@@ -45,14 +57,15 @@ public class TicTacToe implements ActionListener {
         title_panel.setLayout(new BorderLayout());
         title_panel.setBounds(0, 0, 800, 100);
 
+
         button_panel.setLayout(new GridLayout(3, 3));
-        button_panel.setBackground(new Color(150, 150, 150));
 
         firstTurn();
 
         for (int i = 0; i < buttons.length; i++) {
             buttons[i] = new JButton();
             button_panel.add(buttons[i]);
+            buttons[i].setBackground(new Color(230, 243, 255));
             buttons[i].setFont(new Font("MV Boli", Font.BOLD, 120));
             buttons[i].setFocusable(false);
             buttons[i].addActionListener(this);
@@ -64,6 +77,7 @@ public class TicTacToe implements ActionListener {
         frame.add(title_panel, BorderLayout.NORTH);
 
     }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -93,6 +107,7 @@ public class TicTacToe implements ActionListener {
             }
 
         }
+
     }
 
     public void firstTurn() {
@@ -208,8 +223,9 @@ public class TicTacToe implements ActionListener {
             oWins(2, 4, 6);
         }
 
-        // check if draw
-        if (count == 9) {
+        // check if it's a draw
+
+        if ((count == 9) && !isWon) {
             textField.setText("It's a draw!");
         }
 
@@ -223,6 +239,7 @@ public class TicTacToe implements ActionListener {
             button.setEnabled(false);
         }
         textField.setText("X wins!");
+        isWon = true;
 
 
     }
@@ -236,6 +253,7 @@ public class TicTacToe implements ActionListener {
             button.setEnabled(false);
         }
         textField.setText("O wins!");
+        isWon = true;
 
 
     }
